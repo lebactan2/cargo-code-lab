@@ -3,11 +3,204 @@
 <body>
 <header><a class="brand" href="#"><img class="buv-logo" src="assets/buv-logo.png" alt="British University Vietnam — BUV"><span>CARGO CODE LAB</span></a><span class="course">BUV / DIGITAL SKILLS</span><button id="download">Download this lesson</button></header>
 <main><section class="intro"><div><p class="eyebrow">WEEK 5 / L6 STUDIO, EXPLORE</p><h1>HTML &amp; CSS<br><em>IN CARGO</em></h1></div><p class="lead">SCHOOL OF CREATIVE INDUSTRIES<br>Nguyen Hoang Giang<br><a href="mailto:giang.nh@buv.edu.vn">giang.nh@buv.edu.vn</a></p></section>
-<nav id="lessons" aria-label="Choose a lesson"></nav>
+<nav id="lessons" aria-label="Choose a lesson"></nav><p class="reference-link"><a href="#reference">Go to the complete Cargo code workshop ↓</a></p>
 <section class="lessonheading"><div><p class="eyebrow" id="step"></p><h2 id="title"></h2><p id="description"></p></div><button id="reset">↺ Reset lesson</button></section>
 <div class="workspace">
 <section class="panel visual"><div class="panelhead"><h3><span class="dot"></span> LIVE EXAMPLE</h3><div><button id="wide" aria-pressed="true">Wide</button><button id="narrow" aria-pressed="false">Narrow</button></div></div><div class="stage"><iframe title="Live HTML and CSS example" id="preview" sandbox=""></iframe></div><div id="controls" class="controls"></div><div class="challenge"><strong>TRY THIS</strong><p id="challenge"></p></div></section>
 <section class="panel codepanel"><div class="panelhead"><h3>&lt;/&gt; THE CODE BEHIND IT</h3><span id="mode">Synced with controls</span></div><div class="codeheading"><label for="html">HTML <small>the content</small></label><button data-copy="html">Copy HTML</button></div><textarea id="html" spellcheck="false" aria-label="HTML code"></textarea><div class="codeheading"><label for="css">CSS <small>the appearance</small></label><button data-copy="css">Copy CSS</button></div><textarea id="css" spellcheck="false" aria-label="CSS code"></textarea><div class="editorfoot"><span>Edit either code box, then apply.</span><button id="apply">Apply code →</button></div><p id="status" role="status" aria-live="polite"></p></section>
 </div>
 <section class="under"><article><p class="eyebrow">READ THE RULE</p><h3 id="conceptTitle"></h3><p id="concept"></p></article><article class="cargo"><p class="eyebrow">TAKE IT INTO CARGO 3</p><h3>Where does this code go?</h3><p id="cargo"></p><p class="sources"><a href="https://docs.cargo.site/css-and-html" target="_blank" rel="noopener">Cargo: CSS & HTML ↗</a> <a href="https://docs.cargo.site/text-styles" target="_blank" rel="noopener">Text styles & buttons ↗</a></p></article></section>
-<footer><span>BRITISH UNIVERSITY VIETNAM<br>WEEK 5 / L6 STUDIO, EXPLORE</span><span>Nguyen Hoang Giang<br><a href="mailto:giang.nh@buv.edu.vn">giang.nh@buv.edu.vn</a></span></footer></main><script src="app.js"></script></body></html>
+<section class="reference" id="reference"><p class="eyebrow">COPY, ADAPT AND TEST IN CARGO</p><h2>COMPLETE CODE WORKSHOP</h2><p>Use the interactive lessons above to experiment. Follow these detailed instructions to apply the examples to your Cargo site. The code blocks below are fixed reference examples; the controls above do not change them.</p><h3>Rules worth knowing</h3>
+<p>These cover most of what students actually want to change:</p>
+<ul>
+  <li><strong>Spacing</strong> — <code>margin</code> and <code>padding</code>. Margin is space outside an element, padding is space inside it. Most layout complaints are a spacing problem.</li>
+  <li><strong>Type detail</strong> — <code>letter-spacing</code>, <code>line-height</code>, <code>text-transform</code>. Small adjustments, large effect on headings.</li>
+  <li><strong>Hover</strong> — <code>a:hover</code>. What changes when the cursor is over a link.</li>
+  <li><strong>Cursor</strong> — <code>cursor</code>. Choose a cursor that remains clear and usable.</li>
+  <li><strong>Transition</strong> — <code>transition</code>. Makes a change happen over time rather than instantly. Keep it under 300ms or the site feels slow.</li>
+</ul>
+<hr style="border: 0; border-top: 1px solid #d9e0e6; margin: 28px 0;">
+<h3>Work and debug systematically</h3>
+<ul>
+  <li><strong>One change at a time.</strong> Change one rule at a time, inspect the result, and keep or remove it.</li>
+  <li><strong>Comment what you write.</strong> <code>/* bigger gap under project titles */</code> explains the purpose of a rule when you return to it.</li>
+  <li><strong>Inspect before guessing.</strong> Right-click the element, Inspect. The browser shows you exactly which rules are hitting it and which are being overridden.</li>
+  <li><strong>Keep a copy.</strong> Paste your working CSS into a note before a big experiment.</li>
+</ul>
+<hr style="border: 0; border-top: 1px solid #d9e0e6; margin: 28px 0;">
+<h3>Copy and paste: HTML and CSS</h3>
+<p>HTML describes the content and structure. CSS controls its appearance. In this example, HTML creates one paragraph and gives it a class; CSS uses that class to change its colour, size and spacing.</p>
+<p><strong>Where to paste:</strong> Open a practice page in Cargo and use <strong>Code View → HTML</strong> for the HTML below. Append it without deleting existing content, then click Update. Paste the CSS into <strong>Site Settings → CSS/HTML → CSS</strong>, after your existing rules. Do not include HTML or &lt;style&gt; tags in the CSS editor. These exercises do not need the site-wide HTML tab.</p>
+<h4>HTML — paste into the page’s Code View</h4><pre style="background: #f3f5f7; padding: 16px; overflow-x: auto; white-space: pre; border: 1px solid #d9e0e6;"><code>&lt;!-- HTML creates the content. The class gives CSS a target. --&gt;
+&lt;p class="wk5-intro"&gt;Hello, I am a designer documenting my process.&lt;/p&gt;</code></pre><h4>CSS — paste into the site CSS editor</h4><pre style="background: #f3f5f7; padding: 16px; overflow-x: auto; white-space: pre; border: 1px solid #d9e0e6;"><code>/* The dot selects elements with class="wk5-intro". */
+.wk5-intro {
+  color: #243c8f;         /* Text colour */
+  background: #eef2ff;    /* Colour behind the text */
+  font-size: 24px;        /* Text size */
+  line-height: 1.5;       /* Space between lines */
+  padding: 20px;          /* Space inside the paragraph */
+  border-radius: 12px;    /* Rounded corners */
+}</code></pre><p><strong>Try it:</strong> Replace the sentence with your own introduction. Change only the colour, then only the padding. Explain what changes and what stays the same. In <code>color: #243c8f;</code>, <code>color</code> is the property and <code>#243c8f</code> is its value.</p>
+<p><strong>Apply to one page:</strong> Replace the selector <code>.wk5-intro</code> with <code>[id="YOUR_PAGE_ID"] .wk5-intro</code>. Replace YOUR_PAGE_ID with the actual Cargo Page ID from the editor’s address bar. This limits the rule to that page. Keep the class name unchanged in the HTML.</p><hr style="border: 0; border-top: 1px solid #d9e0e6; margin: 28px 0;"><h3>Copy and paste: dropdown navigation and overlays</h3>
+<p>Use your Week 4 sitemap to choose the main labels and the pages grouped beneath Work. This example uses a native HTML disclosure: click or tap Work to reveal its links, then click again to close. Keyboard users can focus Work and press Enter or Space. No JavaScript is needed.</p>
+<h4>A. Add a dropdown to your top navigation</h4>
+<p>Paste the HTML into the Code View of your navigation page. If you already have a menu, adapt or replace its navigation block rather than showing two menus. For persistent navigation, use Cargo’s Pin settings for that page. The menu below expands in the page layout and pushes content down; it does not float over other content. Use the Cargo overlay variation below when you want a panel above the page.</p>
+<p>Replace every sample URL with the correct destination on your site. The paths shown here are examples, not pages created by this code. Use Cargo’s Link to Page control when assigning links in the visual editor, particularly for Cargo overlay destinations.</p>
+<h4>HTML — paste into your navigation page</h4><pre style="background: #f3f5f7; padding: 16px; overflow-x: auto; white-space: pre; border: 1px solid #d9e0e6;"><code>&lt;!-- Replace every sample href with a real page URL from your site. --&gt;
+&lt;nav class="wk5-nav" aria-label="Main navigation"&gt;
+  &lt;a href="/"&gt;Home&lt;/a&gt;
+  &lt;!-- details and summary create a click/tap dropdown without JavaScript. --&gt;
+  &lt;details class="wk5-dropdown"&gt;
+    &lt;summary&gt;Work&lt;/summary&gt;
+    &lt;div class="wk5-submenu"&gt;
+      &lt;a href="/project-one"&gt;Project One&lt;/a&gt;
+      &lt;a href="/project-two"&gt;Project Two&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/details&gt;
+  &lt;a href="/journal"&gt;Journal&lt;/a&gt;
+  &lt;a href="/about"&gt;About&lt;/a&gt;
+&lt;/nav&gt;</code></pre><h4>CSS — paste once into the site CSS editor</h4><pre style="background: #f3f5f7; padding: 16px; overflow-x: auto; white-space: pre; border: 1px solid #d9e0e6;"><code>/* A wrapping row for your top navigation. */
+.wk5-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px 24px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Keep these rules limited to this menu. */
+.wk5-nav a,
+.wk5-nav summary {
+  color: #202b35;
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+.wk5-nav a {
+  display: block;
+  text-decoration: none;
+}
+.wk5-nav summary {
+  cursor: pointer; /* The native triangle signals expandable content. */
+}
+
+/* The browser hides this content until details is open. */
+.wk5-submenu {
+  margin-top: 8px;
+  padding: 8px;
+  background: #f3f5f7;
+  border: 1px solid #d9e0e6;
+  border-radius: 8px;
+}
+
+/* Hover feedback plus a visible keyboard focus indicator. */
+.wk5-nav a:hover,
+.wk5-nav summary:hover {
+  background: #e4e9f0;
+}
+.wk5-nav a:focus-visible,
+.wk5-nav summary:focus-visible {
+  outline: 3px solid #2457d6;
+  outline-offset: 3px;
+}
+
+/* Adding this second class changes the same menu into a vertical list. */
+.wk5-nav.wk5-nav-overlay {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Stack the top navigation on small screens too. */
+@media (max-width: 600px) {
+  .wk5-nav { flex-direction: column; align-items: stretch; }
+}</code></pre><h4>B. Put the dropdown inside a Cargo overlay</h4>
+<p>Reuse the overlay menu from Week 3. Paste the same navigation HTML into the overlay page’s Code View, then replace its opening nav line with the line below. Keep the rest of the HTML and the closing nav tag. The additional class stacks the menu vertically; the CSS above already includes its rules.</p><pre style="background: #f3f5f7; padding: 16px; overflow-x: auto; white-space: pre; border: 1px solid #d9e0e6;"><code>&lt;nav class="wk5-nav wk5-nav-overlay" aria-label="Overlay navigation"&gt;</code></pre><ol>
+<li>In Cargo’s Pages menu, right-click the menu page and set it to <strong>Overlay</strong>. Choose its position and width with Cargo’s visual controls.</li>
+<li>On your top navigation page, create a Menu text link or icon. Select it, open <strong>Link → Link to Page</strong>, and choose the overlay page. Cargo creates the overlay behaviour; the dropdown code does not open the overlay itself.</li>
+<li>Inside the overlay, add a Close text link or icon and assign <strong>Link → Navigate → Close Overlay</strong>. Enable <strong>Close on clickout</strong> and <strong>Close on navigate</strong> where appropriate.</li>
+<li>Preview the site. Open Menu, expand Work, follow a project link, reopen the menu and test Close. Check Escape closes the Cargo overlay. The nested Work disclosure closes by activating Work again; it does not have a separate Escape or click-outside handler.</li>
+</ol>
+<p><strong>Check:</strong> Test on desktop and mobile, then use Tab, Shift+Tab and Enter without a mouse. Every destination should work, every focused item should be visible, and long labels should remain readable. Give your overlay enough space to show the expanded submenu.</p><hr style="border: 0; border-top: 1px solid #d9e0e6; margin: 28px 0;"><h3>Copy and paste: hover states for a Cargo button</h3>
+<p>Start with an existing Cargo button and keep its design. Add CSS to change its appearance on hover, keyboard focus and press. No new HTML is needed for this exercise.</p>
+<h4>A. Choose and link your Cargo button</h4>
+<ol>
+<li>Select an existing button on your page. If you need one, use <strong>Add... → More... → Button...</strong> and choose a Cargo preset.</li>
+<li>Edit the label, then use <strong>Link → Link to Page</strong> to assign its destination. A button style alone does not create a working link.</li>
+<li>Use Cargo’s visual controls to set its normal colours, spacing and shape. Choose a filled button for this example so the brightness change is easy to see.</li>
+</ol>
+<h4>B. Find the button’s existing CSS selector</h4>
+<p>With the button text selected, identify its Text Style. Open that style in <strong>Text Styles (Aa)</strong> and click its <strong>&lt;/&gt;</strong> control. Find the selector before the opening brace of the rule that styles this button. Copy the selector exactly, including its leading dot if it is a class. Cargo’s generated style names vary, so do not assume every button uses the same class.</p>
+<p>In the snippet below, replace <strong>every</strong> occurrence of <code>.button-example</code> with that actual selector. For example, if the style rule begins <code>.button-1 {</code>, use <code>.button-1:hover</code>. The name <code>.button-1</code> is illustrative: use the name shown in your own editor. If unsure, Inspect the button in the browser and identify the element that carries its background, border and padding.</p>
+<h4>C. CSS — paste at the end of Site Settings → CSS/HTML → CSS</h4>
+<p>Keep the existing style rules. Paste this additional CSS below them, without &lt;style&gt; tags. It affects all buttons sharing the selected style; duplicate the Text Style in Cargo first if you want a separate style for one button.</p>
+<pre style="background: #f3f5f7; padding: 16px; overflow-x: auto; white-space: pre; border: 1px solid #d9e0e6;"><code>/* Replace .button-example everywhere with your Cargo button style selector.
+   Copy that selector from the button Text Style's CSS panel.
+   This is an example name, not a universal Cargo button class. */
+.button-example {
+  /* Keep the original Cargo colours, border, padding and shape. */
+  transition: filter 180ms ease;
+}
+
+/* Slightly darken the existing button when hovered or focused.
+   focus-within also works when Cargo places a link inside the style. */
+.button-example:hover,
+.button-example:focus-visible,
+.button-example:focus-within {
+  filter: brightness(0.85);
+}
+
+/* Make keyboard focus easy to see. */
+.button-example:focus-visible,
+.button-example:focus-within {
+  outline: 3px solid #2457d6;
+  outline-offset: 4px;
+}
+
+/* A stronger response while the button is being pressed. */
+.button-example:active {
+  filter: brightness(0.7);
+}
+
+/* Remove animation for visitors who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .button-example { transition: none; }
+}</code></pre>
+<p><strong>What changes?</strong> <code>:hover</code> responds to the pointer. <code>:focus-visible</code> marks keyboard focus on the styled element; <code>:focus-within</code> also handles a focused link inside it. <code>:active</code> lasts while pressed, not after a click. Brightness changes the rendered button, including its text, without replacing Cargo’s base design.</p>
+<p><strong>Test and adapt:</strong> Preview outside edit mode. Hover, then use Tab and Enter to focus and follow the link. Test on mobile, where hover may not appear. Try brightness values of 0.95 and 0.85 and choose the clearer result. Keep text readable in every state and make sure the normal button is recognisable without hover. If nothing changes, check the copied selector and use Inspect to see whether another rule overrides it. If an existing style already uses a filter or transition, merge these changes with that rule rather than overwriting its effect.</p>
+<h4>D. Variation: shift the hue on hover</h4>
+<p>Choose an existing Cargo button with a coloured fill using Cargo’s visual controls. This variation rotates its colours on hover and keyboard focus, then uses a second hue while pressed. Black, white and neutral grey will not show a noticeable hue shift.</p>
+<p><strong>Where to paste:</strong> In the site CSS editor, replace the brightness example from section C with this snippet. Replace every <code>.button-example</code> with your button’s actual style selector. Use one variation at a time so competing filter rules do not override each other.</p>
+<pre style="background: #f3f5f7; padding: 16px; overflow-x: auto; white-space: pre; border: 1px solid #d9e0e6;"><code>/* Replace .button-example with your existing Cargo button selector.
+   Use this INSTEAD of the brightness example above. */
+.button-example {
+  transition: filter 180ms ease;
+}
+
+/* Shift the existing colours around the colour wheel on hover/focus. */
+.button-example:hover,
+.button-example:focus-visible,
+.button-example:focus-within {
+  filter: hue-rotate(60deg);
+}
+
+/* Keep keyboard focus visible. */
+.button-example:focus-visible,
+.button-example:focus-within {
+  outline: 3px solid #2457d6;
+  outline-offset: 4px;
+}
+
+/* A different hue while the button is pressed. */
+.button-example:active {
+  filter: hue-rotate(120deg);
+}
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+  .button-example { transition: none; }
+}</code></pre>
+<p><strong>Experiment:</strong> Compare <code>hue-rotate(30deg)</code>, <code>hue-rotate(90deg)</code> and <code>hue-rotate(180deg)</code> in the hover rule. A full <code>360deg</code> returns to the original hue. Choose one that supports your palette and document the alternatives in your journal.</p>
+<p>The filter affects the whole rendered button, including coloured text, borders, icons and its focus outline; it does not change only the background. Check text contrast and keyboard focus in every state. For an exact brand colour on the background alone, use a background-colour rule instead. Test on mobile too: the normal button must remain clear without hover.</p>
+<p><a href="https://docs.cargo.site/text-styles" target="_blank">Cargo Text Styles: built-in buttons and style controls</a></p>
+<hr style="border: 0; border-top: 1px solid #d9e0e6; margin: 28px 0;">
+</section><footer><span>BRITISH UNIVERSITY VIETNAM<br>WEEK 5 / L6 STUDIO, EXPLORE</span><span>Nguyen Hoang Giang<br><a href="mailto:giang.nh@buv.edu.vn">giang.nh@buv.edu.vn</a></span></footer></main><script src="app.js"></script></body></html>
