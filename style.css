@@ -9,3 +9,6 @@ header{background:#000102;color:#f6f2e6;padding-top:14px;padding-bottom:14px;bor
 @media(max-width:600px){header{flex-wrap:wrap}.buv-logo{width:83px;height:44px}.brand{font-size:11px;gap:10px}.intro{display:block}.lead{display:block;margin-bottom:0}.lessonheading h2{font-size:23px}footer{font-size:11px}}
 
 .reference{border-top:3px solid #000102;padding:32px 0;max-width:1000px}.reference>h3{font-size:26px;margin-top:32px;text-transform:uppercase;font-weight:400}.reference h4{font-size:19px;margin-top:24px}.reference pre{font:14px/1.6 Consolas,monospace;background:#000102!important;color:#f6f2e6;border:0!important;max-width:100%;overflow:auto}.reference code{font-family:Consolas,monospace}.reference p,.reference li{max-width:900px}.reference a,.reference-link a{color:#8e3025}.reference-link{font-size:13px;margin:10px 0 0}
+
+/* Code first in both visual and keyboard reading order. */
+.workspace{align-items:start}.visual{position:sticky;top:16px}#css{min-height:390px}#html{height:180px}.small{font-size:12px}.intro{padding:25px 0}.intro h1{font-size:44px}@media(max-width:850px){.visual{position:static}}
