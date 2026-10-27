@@ -20,7 +20,9 @@ controls: [
  ['hoverLabel','Text on hover / focus','text','View my journal'],
  ['symbol','Normal symbol','select','→',['None','→','↗','+','✦','↓']],
  ['hoverSymbol','Hover / focus symbol','select','↗',['None','→','↗','+','✦','↓']],
- ['family','Normal typeface','select','Arial',['Arial','Georgia','Verdana','Courier New']],
+ ["fontStyle", "Normal button style", "select", "normal", ["normal", "italic"]],
+["hoverFontStyle", "Hover / focus button style", "select", "italic", ["normal", "italic"]],
+['family','Normal typeface','select','Arial',['Arial','Georgia','Verdana','Courier New']],
  ['hoverFamily','Hover / focus typeface','select','Georgia',['Arial','Georgia','Verdana','Courier New']],
  ['underline','Hover underline style','select','solid',['none','solid','double','dotted','dashed','wavy']],
  ['bg','Button fill','color','#DDF19A'],
@@ -46,6 +48,7 @@ build: v => ({
   border-radius: 40px;
   font-family: "${v.family}", ${v.family==='Georgia'?'serif':v.family==='Courier New'?'monospace':'sans-serif'};
   font-size: 18px;
+  font-style: ${v.fontStyle}; /* normal or italic */
   font-weight: bold;
   line-height: 1.5;
   text-decoration: none;
@@ -58,6 +61,7 @@ build: v => ({
 .cargo-lab .lab-button:hover,
 .cargo-lab .lab-button:focus-visible {
   font-family: "${v.hoverFamily}", ${v.hoverFamily==='Georgia'?'serif':v.hoverFamily==='Courier New'?'monospace':'sans-serif'};
+  font-style: ${v.hoverFontStyle}; /* normal or italic */
   text-decoration-line: ${v.underline==='none'?'none':'underline'};
   text-decoration-style: ${v.underline==='none'?'solid':v.underline};
   text-decoration-thickness: 2px;
@@ -80,7 +84,9 @@ build: v => ({
 }`
 })
 },
-{name:'Dropdown menu',title:'Structure can create interaction.',desc:'Click Work in the preview. A native HTML disclosure works without JavaScript.',conceptTitle:'details + summary = disclosure',concept:'<summary> is the clickable label inside <details>. The browser opens and closes the remaining content. This example expands in the layout. It is a submenu, not the Cargo overlay-opening mechanism.',challenge:'Use Tab to focus Work and Enter to open it. Switch the layout to column: how could you use this inside your Week 3 overlay?',cargo:'Paste this HTML into your navigation page or inside your existing Cargo overlay page. Replace the example # links with real destinations using Link to Page. Set up the overlay trigger and Close Overlay link through Cargo’s Link menu. The CSS below styles only this submenu.',controls:[['direction','Layout direction','select','row',['row','column']],['gap','Gap','range',16,0,40,'px'],['bg','Submenu fill','color','#EEF2E8']],build:v=>({html:'<nav class="lab-nav" aria-label="Example navigation">\n  <a href="#home">Home</a>\n  <details>\n    <summary>Work</summary>\n    <div class="lab-submenu">\n      <a href="#project-one">Project One</a>\n      <a href="#project-two">Project Two</a>\n    </div>\n  </details>\n  <a href="#about">About</a>\n</nav>',css:`.cargo-lab .lab-nav {\n  display: flex;\n  flex-wrap: wrap;\n  flex-direction: ${v.direction};\n  gap: ${v.gap}px;\n  align-items: flex-start;\n}\n.cargo-lab .lab-nav a, .cargo-lab .lab-nav summary {\n  color: #214D3E;\n  padding: 8px;\n}\n.cargo-lab .lab-nav summary { cursor: pointer; }\n.cargo-lab .lab-submenu {\n  background: ${v.bg};\n  padding: 8px;\n  border-radius: 8px;\n}\n.cargo-lab .lab-submenu a { display: block; }\n.cargo-lab .lab-nav :focus-visible {\n  outline: 3px solid #2457D6;\n  outline-offset: 2px;\n}`})}
+{name:'Dropdown menu',title:'Structure can create interaction.',desc:'Click Work in the preview. A native HTML disclosure works without JavaScript.',conceptTitle:'details + summary = disclosure',concept:'<summary> is the clickable label inside <details>. The browser opens and closes the remaining content. This example expands in the layout. It is a submenu, not the Cargo overlay-opening mechanism.',challenge:'Use Tab to focus Work and Enter to open it. Switch the layout to column: how could you use this inside your Week 3 overlay?',cargo:'Paste this HTML into your navigation page or inside your existing Cargo overlay page. Replace the example # links with real destinations using Link to Page. Set up the overlay trigger and Close Overlay link through Cargo’s Link menu. The CSS below styles only this submenu.',controls:[["menuStyle", "Menu text style", "select", "normal", ["normal", "italic"]],
+["submenuStyle", "Submenu text style", "select", "italic", ["normal", "italic"]],
+['direction','Layout direction','select','row',['row','column']],['gap','Gap','range',16,0,40,'px'],['bg','Submenu fill','color','#EEF2E8']],build:v=>({html:'<nav class="lab-nav" aria-label="Example navigation">\n  <a href="#home">Home</a>\n  <details>\n    <summary>Work</summary>\n    <div class="lab-submenu">\n      <a href="#project-one">Project One</a>\n      <a href="#project-two">Project Two</a>\n    </div>\n  </details>\n  <a href="#about">About</a>\n</nav>',css:`.cargo-lab .lab-nav {\n  display: flex;\n  flex-wrap: wrap;\n  flex-direction: ${v.direction};\n  gap: ${v.gap}px;\n  align-items: flex-start;\n}\n.cargo-lab .lab-nav a, .cargo-lab .lab-nav summary {\n  color: #214D3E;\n  font-style: ${v.menuStyle}; /* normal or italic */\n  padding: 8px;\n}\n.cargo-lab .lab-nav summary { cursor: pointer; }\n.cargo-lab .lab-submenu {\n  background: ${v.bg};\n  padding: 8px;\n  border-radius: 8px;\n}\n.cargo-lab .lab-submenu a {\n  display: block;\n  font-style: ${v.submenuStyle}; /* Override the main menu style. */\n}\n.cargo-lab .lab-nav :focus-visible {\n  outline: 3px solid #2457D6;\n  outline-offset: 2px;\n}`})}
 ];
 let active=0,values={},current={},dirty=false;
 lessons.forEach((l,i)=>{const b=document.createElement('button');b.textContent=`0${i+1}  ${l.name}`;b.onclick=()=>select(i);$('lessons').append(b)});
