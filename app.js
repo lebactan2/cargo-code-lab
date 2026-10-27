@@ -7,7 +7,79 @@ const lessons=[
 {name:'HTML structure',title:'Give your content a clear structure.',desc:'Change the words and their HTML tags. CSS can style a heading, but HTML tells the browser what it is.',conceptTitle:'Opening tag + content + closing tag',concept:'<h2> introduces a heading; <p> introduces a paragraph. The class attribute connects an element to its CSS rule. Choose a heading level for the document hierarchy, not just its visual size.',challenge:'Switch the heading from h2 to h3. Notice that the font size stays the same because our CSS sets it explicitly.',controls:[['heading','Heading text','text','Making space for ideas'],['tag','Heading element','select','h2',['h2','h3']],['text','Paragraph text','text','Research. Experiment. Reflect. Repeat.']],build:v=>({html:`<${v.tag} class="lab-title">${esc(v.heading)}</${v.tag}>\n<p class="lab-copy">${esc(v.text)}</p>`,css:'.cargo-lab .lab-title {\n  font-size: 32px;\n  color: #214D3E;\n}\n\n.cargo-lab .lab-copy {\n  font-size: 18px;\n  line-height: 1.6;\n}'})},
 {name:'Type & spacing',title:'Make the same words easier to read.',desc:'Explore size, line height and letter spacing. Change one variable, then explain the result.',conceptTitle:'A number needs the right unit',concept:'px is a fixed CSS length. A unitless line-height is multiplied by the font size: 20px × 1.5 gives a 30px line box. Letter spacing changes the space between letters.',challenge:'Try large text in the narrow preview. Find a combination that reads well without making the lines feel crowded.',controls:[['size','Font size','range',24,14,42,'px'],['line','Line height','range',1.5,1,2.2,'',0.1],['spacing','Letter spacing','range',0,-1,4,'px',0.5],['family','Font family','select','Arial',['Arial','Georgia','monospace']]],build:v=>({html:'<p class="lab-type">A process journal makes your thinking visible. Show what you tried, what changed, and why.</p>',css:`.cargo-lab .lab-type {\n  font-family: ${v.family};\n  font-size: ${v.size}px;\n  line-height: ${v.line};\n  letter-spacing: ${v.spacing}px;\n  color: #214D3E;\n}`})},
 {name:'The box model',title:'Space inside. Space outside.',desc:'See how padding, margin and border change the space around one piece of content.',conceptTitle:'Content → padding → border → margin',concept:'Padding sits between content and border. Margin separates this box from its neighbours. The dotted preview area belongs to this teaching page; it is not part of the copied CSS.',challenge:'Set padding to 0 and margin to 30px, then reverse them. Explain why the green background covers a different area.',controls:[['padding','Padding','range',24,0,48,'px'],['margin','Margin','range',12,0,40,'px'],['border','Border width','range',2,0,12,'px'],['radius','Corner radius','range',12,0,50,'px']],build:v=>({html:'<div class="lab-box">\n  Room for a new idea.\n</div>',css:`.cargo-lab .lab-box {\n  padding: ${v.padding}px;\n  margin: ${v.margin}px;\n  border: ${v.border}px solid #214D3E;\n  border-radius: ${v.radius}px;\n  background: #DDF19A;\n  color: #214D3E;\n}`})},
-{name:'Cargo hover',title:'Add a hover state to your Cargo button.',desc:'The HTML and CSS on the left render this button. Hover it, or focus it with Tab.',conceptTitle:'Keep your Cargo button; add a class',concept:'The shared lab-button class provides a predictable demonstration style. On your existing Cargo button, keep its original classes and link attributes, then add lab-button to the element that carries the button styling. The CSS below deliberately sets its appearance as well as its hover state.',challenge:'Try hue and brightness. A hue filter affects the whole button; neutral colours will not visibly change hue. Check text and focus contrast.',cargo:'For an existing Cargo button, use Code View to add lab-button to its styled element, preserving its classes and link attributes. Wrap that example in a div with class cargo-lab, as shown. Do not add a duplicate button. The HTML shown is a minimal reference for a plain linked button; your Cargo link attributes may differ. Paste the complete CSS into the site CSS editor. Native Cargo rules may require inspection if they are more specific.',controls:[['bg','Button fill','color','#DDF19A'],['effect','Hover effect','select','hue',['hue','brightness']],['hue','Hue rotation','range',60,0,360,'°'],['brightness','Brightness','range',0.85,0.4,1.4,'',0.05]],build:v=>({html:'<!-- Reference: add lab-button to your existing Cargo button. -->\n<a class="lab-button" href="#journal">Explore my journal</a>\n<p id="journal">Journal destination — replace with your own page link.</p>',css:`/* Shared button style: used in this preview and in Cargo. */\n.cargo-lab .lab-button {\n  display: inline-block;\n  background: ${v.bg};\n  color: #172A28;\n  padding: 16px 26px;\n  border: 1px solid #172A28;\n  border-radius: 40px;\n  font: bold 18px/1.5 Arial, sans-serif;\n  text-decoration: none;\n  transition: filter 180ms ease;\n}\n.cargo-lab .lab-button:hover,\n.cargo-lab .lab-button:focus-visible,\n.cargo-lab .lab-button:focus-within {\n  filter: ${v.effect==='hue'?`hue-rotate(${v.hue}deg)`:`brightness(${v.brightness})`};\n}\n.cargo-lab .lab-button:focus-visible,\n.cargo-lab .lab-button:focus-within {\n  outline: 3px solid #2457D6;\n  outline-offset: 4px;\n}\n@media (prefers-reduced-motion: reduce) {\n  .cargo-lab .lab-button { transition: none; }\n}`})},
+{
+name: 'Cargo hover',
+title: 'Style your Cargo button and its hover state.',
+desc: 'Change the wording, symbols, typeface and underline. Hover the button or focus it with Tab to compare states.',
+conceptTitle: 'One link, two visual states',
+concept: 'Keep your existing Cargo button and destination. The normal and hover spans hold alternative labels. CSS switches the visible label on hover and keyboard focus. The link keeps a consistent accessible name. Use the same action in both labels; a symbol should support the words.',
+challenge: 'Try a wavy underline, Georgia on hover, and an arrow changing from → to ↗. Compare readability and avoid a large change in label width. Touchscreens use the normal state, so keep its wording complete.',
+cargo: 'In Code View, preserve your existing Cargo button classes and link attributes. Add lab-button to its styled link, keep the cargo-lab wrapper, and replace only its inner label with the two spans shown. Set aria-label to the button’s action. Paste the complete CSS into the CSS editor. These system fonts need no import; load any custom font in Cargo before using its family name.',
+controls: [
+ ['label','Button text','text','Explore my journal'],
+ ['hoverLabel','Text on hover / focus','text','View my journal'],
+ ['symbol','Normal symbol','select','→',['None','→','↗','+','✦','↓']],
+ ['hoverSymbol','Hover / focus symbol','select','↗',['None','→','↗','+','✦','↓']],
+ ['family','Normal typeface','select','Arial',['Arial','Georgia','Verdana','Courier New']],
+ ['hoverFamily','Hover / focus typeface','select','Georgia',['Arial','Georgia','Verdana','Courier New']],
+ ['underline','Hover underline style','select','solid',['none','solid','double','dotted','dashed','wavy']],
+ ['bg','Button fill','color','#DDF19A'],
+ ['effect','Hover colour effect','select','hue',['none','hue','brightness']],
+ ['hue','Hue rotation','range',60,0,360,'°'],
+ ['brightness','Brightness','range',0.85,0.4,1.4,'',0.05]
+],
+build: v => ({
+ html: `<!-- Keep your Cargo button’s original classes and link attributes.
+     These two spans replace only the label inside that button. -->
+<a class="lab-button" href="#journal" aria-label="${esc(v.label)}">
+  <span class="lab-label-normal" aria-hidden="true">${esc(v.label)}${v.symbol==='None'?'':' '+esc(v.symbol)}</span>
+  <span class="lab-label-hover" aria-hidden="true">${esc(v.hoverLabel)}${v.hoverSymbol==='None'?'':' '+esc(v.hoverSymbol)}</span>
+</a>
+<p id="journal">Journal destination — replace with your own page link.</p>`,
+ css: `/* 1. Normal state: preserve your Cargo link; add this class. */
+.cargo-lab .lab-button {
+  display: inline-block;
+  background: ${v.bg};
+  color: #172A28;
+  padding: 16px 26px;
+  border: 1px solid #172A28;
+  border-radius: 40px;
+  font-family: "${v.family}", ${v.family==='Georgia'?'serif':v.family==='Courier New'?'monospace':'sans-serif'};
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: filter 180ms ease;
+}
+/* Show the normal wording until hover or keyboard focus. */
+.cargo-lab .lab-label-hover { display: none; }
+
+/* 2. Hover and keyboard focus: font, underline and colour. */
+.cargo-lab .lab-button:hover,
+.cargo-lab .lab-button:focus-visible {
+  font-family: "${v.hoverFamily}", ${v.hoverFamily==='Georgia'?'serif':v.hoverFamily==='Courier New'?'monospace':'sans-serif'};
+  text-decoration-line: ${v.underline==='none'?'none':'underline'};
+  text-decoration-style: ${v.underline==='none'?'solid':v.underline};
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  filter: ${v.effect==='none'?'none':v.effect==='hue'?`hue-rotate(${v.hue}deg)`:`brightness(${v.brightness})`};
+}
+/* 3. Switch words and symbols without changing the destination. */
+.cargo-lab .lab-button:hover .lab-label-normal,
+.cargo-lab .lab-button:focus-visible .lab-label-normal { display: none; }
+.cargo-lab .lab-button:hover .lab-label-hover,
+.cargo-lab .lab-button:focus-visible .lab-label-hover { display: inline; }
+
+/* Keep a visible keyboard focus indicator. */
+.cargo-lab .lab-button:focus-visible {
+  outline: 3px solid #2457D6;
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cargo-lab .lab-button { transition: none; }
+}`
+})
+},
 {name:'Dropdown menu',title:'Structure can create interaction.',desc:'Click Work in the preview. A native HTML disclosure works without JavaScript.',conceptTitle:'details + summary = disclosure',concept:'<summary> is the clickable label inside <details>. The browser opens and closes the remaining content. This example expands in the layout. It is a submenu, not the Cargo overlay-opening mechanism.',challenge:'Use Tab to focus Work and Enter to open it. Switch the layout to column: how could you use this inside your Week 3 overlay?',cargo:'Paste this HTML into your navigation page or inside your existing Cargo overlay page. Replace the example # links with real destinations using Link to Page. Set up the overlay trigger and Close Overlay link through Cargo’s Link menu. The CSS below styles only this submenu.',controls:[['direction','Layout direction','select','row',['row','column']],['gap','Gap','range',16,0,40,'px'],['bg','Submenu fill','color','#EEF2E8']],build:v=>({html:'<nav class="lab-nav" aria-label="Example navigation">\n  <a href="#home">Home</a>\n  <details>\n    <summary>Work</summary>\n    <div class="lab-submenu">\n      <a href="#project-one">Project One</a>\n      <a href="#project-two">Project Two</a>\n    </div>\n  </details>\n  <a href="#about">About</a>\n</nav>',css:`.cargo-lab .lab-nav {\n  display: flex;\n  flex-wrap: wrap;\n  flex-direction: ${v.direction};\n  gap: ${v.gap}px;\n  align-items: flex-start;\n}\n.cargo-lab .lab-nav a, .cargo-lab .lab-nav summary {\n  color: #214D3E;\n  padding: 8px;\n}\n.cargo-lab .lab-nav summary { cursor: pointer; }\n.cargo-lab .lab-submenu {\n  background: ${v.bg};\n  padding: 8px;\n  border-radius: 8px;\n}\n.cargo-lab .lab-submenu a { display: block; }\n.cargo-lab .lab-nav :focus-visible {\n  outline: 3px solid #2457D6;\n  outline-offset: 2px;\n}`})}
 ];
 let active=0,values={},current={},dirty=false;
