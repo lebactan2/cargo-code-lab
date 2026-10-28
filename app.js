@@ -3,7 +3,14 @@
    Paste this script into Site Settings > CSS/HTML > HTML. */
 (function () {
   const initialisedRoots = new WeakMap();
-  function initialiseCodeLab(force = false) {
+  const draftKey = 'buv-code-lab-drafts-v1';
+  let drafts = {active: 0, lessons: {}};
+  try {
+    const saved = JSON.parse(localStorage.getItem(draftKey));
+    if (saved && saved.lessons && typeof saved.lessons === 'object') drafts = saved;
+  } catch (_) { /* Keep in-memory recovery if browser storage is unavailable. */ }
+
+  function initialiseCodeLab() {
     const root = document.body;
     if (!root || !root.querySelector("#title")) return;
     // Cargo may remove empty textarea elements when saving page HTML.
@@ -19,7 +26,7 @@
         heading.after(editor);
       }
     }
-    if (initialisedRoots.get(root) === root.querySelector("#html") && (!force || root.querySelector("#html").value)) return;
+    if (initialisedRoots.get(root) === root.querySelector("#html")) return;
     initialisedRoots.set(root, root.querySelector("#html"));
     root.querySelector("#lessons").replaceChildren();
     const $ = (id) => root.querySelector("#" + id);
@@ -237,7 +244,7 @@ build: v => ({
       conceptTitle: 'Your pasted code stays yours',
       concept: 'This workspace adds no cargo-lab wrapper or foundation styles. cargo-lab is just our custom example class, not a Cargo requirement. Keep the classes used in your own code and match them in CSS. Checks report common structural issues; they do not automatically repair your work.',
       challenge: 'Paste a small section first. Remove a closing brace from CSS, click Check code, then restore it. Use the reported line number to find the problem. Copy your corrected source back to Cargo after testing.',
-      cargo: 'HTML: copy from your Cargo page Code View. CSS: copy the relevant rules from its CSS tab or the site CSS editor. Keep a backup. Cargo page IDs, custom components, overlays, external assets and scripts may not render here. Use Cargo preview for the final check. Pasted code stays in this browser session and is not uploaded by the lab.',
+      cargo: 'HTML: copy from your Cargo page Code View. CSS: copy the relevant rules from its CSS tab or the site CSS editor. Keep a backup. Cargo page IDs, custom components, overlays, external assets and scripts may not render here. Use Cargo preview for the final check. Drafts are saved in this browser on this device and are not uploaded by the lab. Reset lesson clears the current draft.',
       controls: [], raw: true,
       build: () => ({html: '<!-- Replace this sample with your Cargo page HTML. -->\n<div class="my-example">\n  <h2>My Cargo test</h2>\n  <p>Edit, check, then preview.</p>\n</div>', css: '/* Replace these rules with your Cargo CSS. */\n.my-example {\n  padding: 24px;\n  background: #F6F2E6;\n  color: #172A28;\n  font: 18px/1.5 Arial, sans-serif;\n}'})
     });
@@ -402,14 +409,13 @@ codePanel.onkeydown = event => {
       b.onclick = () => select(i);
       $("lessons").append(b);
     });
-    function select(i) {
-      if (typeof active === 'number' && lessons[active]?.raw && dirty && i !== active) {
-        if (!confirm('Leave the paste workspace and discard your edits? Copy or download them first if you need them.')) return;
-      }
+    function select(i, reset = false) {
       active = i;
       values = {};
       const l = lessons[i];
       l.controls.forEach((c) => (values[c[0]] = c[3]));
+      const saved = reset ? null : drafts.lessons[l.name];
+      if (saved?.values) Object.assign(values, saved.values);
       [...$("lessons").children].forEach((b, j) =>
         b.setAttribute("aria-current", i === j),
       );
@@ -421,9 +427,25 @@ codePanel.onkeydown = event => {
       $("challenge").textContent = l.challenge;
       $("cargo").textContent = l.cargo || cargoDefault;
       $("controls").replaceChildren();
-      l.controls.forEach(control);
+      l.controls.forEach(c => control([c[0], c[1], c[2], values[c[0]], ...c.slice(4)]));
       $("status").textContent = "";
-      generate();
+      if (saved && typeof saved.html === 'string' && typeof saved.css === 'string') {
+        $('html').value = saved.html; $('css').value = saved.css;
+        dirty = Boolean(saved.dirty);
+        paintEditor('html'); paintEditor('css');
+        render();
+        $('mode').textContent = 'Recovered draft';
+        $('status').textContent = 'Your saved HTML and CSS have been restored.';
+        saveDraft();
+      } else generate();
+    }
+    function saveDraft() {
+      drafts.active = active;
+      drafts.lessons[lessons[active].name] = {
+        html: $('html').value, css: $('css').value, values: {...values}, dirty
+      };
+      try { localStorage.setItem(draftKey, JSON.stringify(drafts)); }
+      catch (_) { $('status').textContent = 'Browser storage is unavailable. Download your code before closing or refreshing.'; }
     }
     function control(c) {
       const [key, label, type, initial, min, max, unit, step] = c;
@@ -509,6 +531,7 @@ codePanel.onkeydown = event => {
       $("mode").textContent = "Synced with controls";
       $("status").textContent = "";
       render();
+      saveDraft();
     }
     function render() {
       $("preview").setAttribute("sandbox", "");
@@ -524,7 +547,8 @@ codePanel.onkeydown = event => {
           paintEditor(id);
           $("mode").textContent = "Code edited — apply to preview";
           $("status").textContent =
-            lessons[active].raw ? "Edits stay here until you reset or leave this workspace. Check code, then apply." : "Changing a visual control will regenerate the code.";
+            lessons[active].raw ? "Draft saved in this browser. Check code, then apply." : "Draft saved in this browser. Changing a visual control will regenerate the code.";
+          saveDraft();
         }),
     );
     $("apply").onclick = () => {
@@ -534,7 +558,7 @@ codePanel.onkeydown = event => {
       $("status").textContent =
         "Applied the HTML and CSS shown. Invalid CSS rules are ignored by the browser.";
     };
-    $("reset").onclick = () => { if (!dirty || confirm("Reset this lesson and discard edited code?")) select(active); };
+    $("reset").onclick = () => { if (!dirty || confirm("Reset this lesson and discard edited code?")) select(active, true); };
     $("wide").onclick = () => size(false);
     $("narrow").onclick = () => size(true);
     function size(n) {
@@ -570,10 +594,10 @@ codePanel.onkeydown = event => {
       a.click();
       setTimeout(() => URL.revokeObjectURL(u), 1000);
     };
-    select(0);
+    select(Number.isInteger(drafts.active) && lessons[drafts.active] ? drafts.active : 0);
   }
   initialiseCodeLab();
-  [500, 1500, 3000].forEach(delay => setTimeout(() => initialiseCodeLab(true), delay));
+  [500, 1500, 3000].forEach(delay => setTimeout(() => initialiseCodeLab(), delay));
   new MutationObserver(() => initialiseCodeLab()).observe(document.body, {
     childList: true,
     subtree: true,
