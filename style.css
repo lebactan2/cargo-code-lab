@@ -42,3 +42,10 @@ header{background:#000102;color:#f6f2e6;padding-top:14px;padding-bottom:14px;bor
 .syntax-editor #html, .syntax-editor #css { height:100%; min-height:0; flex:none; }
 
 .syntax-layer span { font-size: inherit; line-height: inherit; font-family: inherit; font-weight: inherit; letter-spacing: inherit; }
+
+/* Expand the code panel without replacing the edited source. */
+.codepanel.code-fullscreen { position:fixed; inset:12px; z-index:2147483647; width:auto; max-width:none; height:calc(100dvh - 24px); display:flex; overflow:auto; box-shadow:0 0 0 20px rgba(0,0,0,.7); }
+.code-fullscreen .syntax-editor, .code-fullscreen .syntax-editor:has(#css) { flex:1 1 0; min-height:120px; height:auto; }
+.code-fullscreen .panelhead, .code-fullscreen .codeheading, .code-fullscreen .editorfoot, .code-fullscreen .editor-location { flex-shrink:0; }
+.code-fullscreen .code-diagnostics { max-height:160px; overflow:auto; flex-shrink:0; }
+#expand-code { white-space:nowrap; }

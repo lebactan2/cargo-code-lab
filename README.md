@@ -6,6 +6,6 @@ Lecturer: Nguyen Hoang Giang — giang.nh@buv.edu.vn
 
 Open index.html locally or use the GitHub Pages website. No dependencies or build step are required.
 
-Six lessons cover colours, HTML structure, typography, spacing, existing Cargo button hover styles, and dropdowns.
+Seven lessons cover colours, HTML structure, typography, spacing, button hover styles, dropdown variations, and a paste-and-debug workspace.
 
 BUV branding is reproduced from the supplied teaching presentation.

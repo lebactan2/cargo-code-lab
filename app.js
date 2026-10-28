@@ -5,7 +5,20 @@
   const initialisedRoots = new WeakMap();
   function initialiseCodeLab(force = false) {
     const root = document.body;
-    if (!root || !root.querySelector("#html") || !root.querySelector("#title")) return;
+    if (!root || !root.querySelector("#title")) return;
+    // Cargo may remove empty textarea elements when saving page HTML.
+    // Restore the two editors beside their labels before loading lessons.
+    for (const id of ['html', 'css']) {
+      if (!root.querySelector('#' + id)) {
+        const heading = root.querySelector('label[for="' + id + '"]')?.closest('.codeheading');
+        if (!heading) return;
+        const editor = document.createElement('textarea');
+        editor.id = id;
+        editor.spellcheck = false;
+        editor.setAttribute('aria-label', id.toUpperCase() + ' code');
+        heading.after(editor);
+      }
+    }
     if (initialisedRoots.get(root) === root.querySelector("#html") && (!force || root.querySelector("#html").value)) return;
     initialisedRoots.set(root, root.querySelector("#html"));
     root.querySelector("#lessons").replaceChildren();
@@ -109,13 +122,13 @@
         }),
       },
       {
-name: 'Cargo hover',
-title: 'Style your Cargo button and its hover state.',
+name: 'Button hover',
+title: 'Style a button and its hover state.',
 desc: 'Change the wording, symbols, typeface and underline. Hover the button or focus it with Tab to compare states.',
 conceptTitle: 'One link, two visual states',
-concept: 'Keep your existing Cargo button and destination. The normal and hover spans hold alternative labels. CSS switches the visible label on hover and keyboard focus. The link keeps a consistent accessible name. Use the same action in both labels; a symbol should support the words.',
+concept: 'Use a link styled as a button. The normal and hover spans hold alternative labels. CSS switches the visible label on hover and keyboard focus. The link keeps a consistent accessible name. Use the same action in both labels; a symbol should support the words.',
 challenge: 'Try a wavy underline, Georgia on hover, and an arrow changing from → to ↗. Compare readability and avoid a large change in label width. Touchscreens use the normal state, so keep its wording complete.',
-cargo: 'In Code View, preserve your existing Cargo button classes and link attributes. Add lab-button to its styled link, keep the cargo-lab wrapper, and replace only its inner label with the two spans shown. Set aria-label to the button’s action. Paste the complete CSS into the CSS editor. These system fonts need no import; load any custom font in Cargo before using its family name.',
+cargo: 'Paste the example HTML into Code View. Replace the link destination and edit the two label spans. Set aria-label to the button’s action. Paste the complete CSS into the CSS editor. These system fonts need no import; load any custom font in Cargo before using its family name.',
 controls: [
  ['label','Button text','text','Explore my journal'],
  ['hoverLabel','Text on hover / focus','text','View my journal'],
@@ -132,14 +145,14 @@ controls: [
  ['brightness','Brightness','range',0.85,0.4,1.4,'',0.05]
 ],
 build: v => ({
- html: `<!-- Keep your Cargo button’s original classes and link attributes.
-     These two spans replace only the label inside that button. -->
+ html: `<!-- The link below is styled as a button by the lab-button class.
+     These two spans define its normal and hover labels. -->
 <a class="lab-button" href="#journal" aria-label="${esc(v.label)}">
   <span class="lab-label-normal" aria-hidden="true">${esc(v.label)}${v.symbol==='None'?'':' '+esc(v.symbol)}</span>
   <span class="lab-label-hover" aria-hidden="true">${esc(v.hoverLabel)}${v.hoverSymbol==='None'?'':' '+esc(v.hoverSymbol)}</span>
 </a>
 <p id="journal">Journal destination — replace with your own page link.</p>`,
- css: `/* 1. Normal state: preserve your Cargo link; add this class. */
+ css: `/* 1. Normal state: style the link with this class. */
 .cargo-lab .lab-button {
   display: inline-block;
   background: ${v.bg};
@@ -186,20 +199,20 @@ build: v => ({
 })
 },
 {
-        name: "Vertical dropdown",
-        title: "Build a vertical dropdown menu.",
+        name: "Dropdown menu",
+        title: "Build a dropdown menu.",
         desc: "Click Work in the preview. A native HTML disclosure works without JavaScript.",
         conceptTitle: "details + summary = disclosure",
         concept:
           "<summary> is the clickable label inside <details>. The browser opens and closes the remaining content. This example expands in the layout. It is a submenu, not the Cargo overlay-opening mechanism.",
         challenge:
-          "Use Tab to focus Work and Enter to open it. Compare vertical and horizontal layouts. Try this vertical menu inside your Week 3 overlay.",
+          "Use Tab to focus Work and Enter to open it. Compare vertical and horizontal layouts. Choose vertical for a stacked menu inside your Week 3 overlay.",
         cargo:
           "Paste this HTML into your navigation page or inside your existing Cargo overlay page. Replace the example # links with real destinations using Link to Page. Set up the overlay trigger and Close Overlay link through Cargo’s Link menu. The CSS below styles only this submenu.",
         controls: [
           ["menuStyle", "Menu text style", "select", "normal", ["normal", "italic"]],
 ["submenuStyle", "Submenu text style", "select", "italic", ["normal", "italic"]],
-["direction", "Menu layout", "select", "vertical", ["vertical", "horizontal"]],
+["direction", "Menu variation", "select", "horizontal", ["horizontal", "vertical"]],
           ["gap", "Gap", "range", 16, 0, 40, "px"],
           ["bg", "Submenu fill", "color", "#EEF2E8"],
         ],
@@ -214,7 +227,7 @@ build: v => ({
       '<!-- Heading and paragraph tags describe content. Their classes select the matching CSS rules. -->',
       '<!-- The paragraph class connects its words to the font and spacing rules. -->',
       '<!-- This div groups content into one box. CSS controls its padding, border and outer margin. -->',
-      '<!-- Both labels belong to the same link. Preserve your Cargo destination and existing classes. -->',
+      '<!-- Both labels belong to the same link. Change its href to your destination. -->',
       '<!-- nav groups links. details opens and closes; summary is its clickable label. Replace # links in Cargo. -->'
     ];
     lessons.push({
@@ -349,6 +362,39 @@ function checkCode() {
   diagnostics.append(note);
 }
 checkButton.onclick = checkCode;
+
+// Expand only the editors; the original textareas and their contents stay in place.
+const codePanel = root.querySelector('.codepanel');
+let expandCode = $('expand-code');
+if (!expandCode) {
+  expandCode = document.createElement('button');
+  expandCode.id = 'expand-code';
+  expandCode.textContent = 'Expand code';
+  expandCode.setAttribute('aria-expanded', 'false');
+  codePanel.querySelector('.panelhead').append(expandCode);
+}
+let previousOverflow = '';
+let previousScroll = 0;
+function toggleCodeView(open) {
+  codePanel.classList.toggle('code-fullscreen', open);
+  expandCode.textContent = open ? 'Close full view · Esc' : 'Expand code';
+  expandCode.setAttribute('aria-expanded', String(open));
+  if (open) { previousOverflow = document.body.style.overflow; previousScroll = window.scrollY; window.scrollTo(0, 0); document.body.style.overflow = 'hidden'; }
+  else { document.body.style.overflow = previousOverflow; window.scrollTo(0, previousScroll); expandCode.focus({preventScroll:true}); }
+  paintEditor('html'); paintEditor('css');
+}
+expandCode.onclick = () => toggleCodeView(!codePanel.classList.contains('code-fullscreen'));
+codePanel.onkeydown = event => {
+  if (!codePanel.classList.contains('code-fullscreen')) return;
+  if (event.key === 'Escape') { event.preventDefault(); toggleCodeView(false); }
+  if (event.key === 'Tab') {
+    const items = [...codePanel.querySelectorAll('button, textarea')].filter(el => !el.disabled);
+    const first = items[0], last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) {event.preventDefault(); last.focus();}
+    else if (!event.shiftKey && document.activeElement === last) {event.preventDefault(); first.focus();}
+  }
+};
+
 
     lessons.forEach((l, i) => {
       const b = document.createElement("button");
