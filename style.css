@@ -40,3 +40,5 @@ header{background:#000102;color:#f6f2e6;padding-top:14px;padding-bottom:14px;bor
 .editorfoot { flex-wrap:wrap; }
 
 .syntax-editor #html, .syntax-editor #css { height:100%; min-height:0; flex:none; }
+
+.syntax-layer span { font-size: inherit; line-height: inherit; font-family: inherit; font-weight: inherit; letter-spacing: inherit; }
