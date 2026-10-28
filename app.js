@@ -29,6 +29,10 @@
     if (initialisedRoots.get(root) === root.querySelector("#html")) return;
     initialisedRoots.set(root, root.querySelector("#html"));
     root.querySelector("#lessons").replaceChildren();
+    const cssLabel = root.querySelector('label[for="css"] small');
+    if (cssLabel) cssLabel.textContent = 'Cargo: destination page CSS tab';
+    const intro = root.querySelector('.reference-link');
+    if (intro) intro.textContent = 'Copy native Cargo HTML and page-scoped CSS. Replace YOUR_PAGE_ID with your page ID. The preview approximates Cargo’s text styles and columns.';
     const $ = (id) => root.querySelector("#" + id);
     const esc = (s) =>
       s
@@ -36,9 +40,7 @@
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;");
-    const sharedCSS = `/* Shared foundation — copy this with the lesson rules.\n   Scoped to this example; it does not reset the whole Cargo site. */\n.cargo-lab {\n  display: block;\n  padding: 24px;\n  font: 18px/1.5 Arial, sans-serif;\n  color: #172A28;\n  overflow-wrap: anywhere;\n}\n.cargo-lab, .cargo-lab * { box-sizing: border-box; }\n.cargo-lab h2, .cargo-lab h3 {\n  font-family: inherit;\n  font-weight: bold;\n  line-height: 1.2;\n  margin: 0 0 16px;\n}\n.cargo-lab h2 { font-size: 28px; }\n.cargo-lab h3 { font-size: 22px; }\n.cargo-lab p { margin: 0 0 16px; }\n\n`;
-    const cargoDefault =
-      "Paste HTML into the page’s Code View and click Update. Paste CSS at the end of Site Settings → CSS/HTML → CSS, without <style> tags. Keep your existing code. Keep the cargo-lab wrapper and class names shown. These are standard HTML/CSS, supported in Cargo Code View; a template’s stronger or inline styles can still override them.";
+    const cargoDefault = "In Cargo, open the destination page’s Code View. Paste the HTML, then paste the CSS into that page’s CSS tab. Replace YOUR_PAGE_ID in every selector with the ID shown in Cargo’s existing page CSS, such as [id=\"P1234567890\"]. Do not paste style tags. Heading and body text inherit your Cargo Text Styles unless a rule below overrides them. The preview substitutes a demo page ID; Cargo columns are approximated here.";
     const lessons = [
       {
         name: "Hex colours",
@@ -46,7 +48,7 @@
         desc: "Choose a colour or type a six-digit hex code. Both the preview and CSS update together.",
         conceptTitle: "Selector → property → value",
         concept:
-          '.lab-card selects the element with class="lab-card". background is the property; the hex colour is its value. In #RRGGBB, the pairs control red, green and blue: 00 is the lowest value and FF the highest.',
+          'h2 selects Heading 2 elements on this page. background is the property; the hex colour is its value. In #RRGGBB, the pairs control red, green and blue: 00 is the lowest value and FF the highest.',
         challenge:
           "Make a warm background with dark text. Then try #000000 and #FFFFFF. Which colour pair is easiest to read?",
         controls: [
@@ -54,8 +56,8 @@
           ["fg", "Text colour", "color", "#214D3E"],
         ],
         build: (v) => ({
-          html: '<div class="lab-card">\n  <h2>Ideas take shape.</h2>\n  <p>My design process, one experiment at a time.</p>\n</div>',
-          css: `/* Target this card, not every element on the site. */\n.cargo-lab .lab-card {\n  background: ${v.bg};\n  color: ${v.fg};\n  padding: 28px;\n  border-radius: 16px;\n}`,
+          html: '<!-- Heading 2 inherits Cargo’s Heading 2 text style. -->\n<h2>Ideas take shape.</h2>\nMy design process, one experiment at a time.',
+          css: `/* Target this card, not every element on the site. */\n[id=YOUR_PAGE_ID] h2 {\n  background: ${v.bg};\n  color: ${v.fg};\n  padding: 28px;\n  border-radius: 16px;\n}`,
         }),
       },
       {
@@ -64,7 +66,7 @@
         desc: "Change the words and their HTML tags. CSS can style a heading, but HTML tells the browser what it is.",
         conceptTitle: "Opening tag + content + closing tag",
         concept:
-          "<h2> introduces a heading; <p> introduces a paragraph. The class attribute connects an element to its CSS rule. Choose a heading level for the document hierarchy, not just its visual size.",
+          "Cargo uses column-set and column-unit for native columns. Two span=6 columns fill its 12-unit grid. h2 uses Heading 2; ordinary text inherits Bodycopy. caption uses Cargo’s Caption text style. The page selector limits overrides to this page.",
         challenge:
           "Switch the heading from h2 to h3. Notice that the font size stays the same because our CSS sets it explicitly.",
         controls: [
@@ -78,8 +80,8 @@
           ],
         ],
         build: (v) => ({
-          html: `<${v.tag} class="lab-title">${esc(v.heading)}</${v.tag}>\n<p class="lab-copy">${esc(v.text)}</p>`,
-          css: ".cargo-lab .lab-title {\n  font-size: 32px;\n  color: #214D3E;\n}\n\n.cargo-lab .lab-copy {\n  font-size: 18px;\n  line-height: 1.6;\n}",
+          html: `<!-- Cargo Columns: two equal columns. Edit widths using the Columns control. -->\n<column-set gutter="2" mobile-stack="true">\n  <column-unit slot="0" span="6">\n    <${v.tag} >${esc(v.heading)}</${v.tag}>\n  </column-unit>\n  <column-unit slot="1" span="6">\n    <span class="caption">${esc(v.text)}</span>\n  </column-unit>\n</column-set>`,
+          css: "[id=YOUR_PAGE_ID] h2, [id=YOUR_PAGE_ID] h3 {\n  font-size: 32px;\n  color: #214D3E;\n}\n\n[id=YOUR_PAGE_ID] .caption {\n  font-size: 18px;\n  line-height: 1.6;\n}",
         }),
       },
       {
@@ -104,8 +106,8 @@
           ],
         ],
         build: (v) => ({
-          html: '<p class="lab-type">A process journal makes your thinking visible. Show what you tried, what changed, and why.</p>',
-          css: `.cargo-lab .lab-type {\n  font-family: ${v.family};\n  font-size: ${v.size}px;\n  line-height: ${v.line};\n  letter-spacing: ${v.spacing}px;\n  color: #214D3E;\n}`,
+          html: '<!-- Ordinary text inherits Cargo Bodycopy. -->\nA process journal makes your thinking visible. Show what you tried, what changed, and why.',
+          css: `[id=YOUR_PAGE_ID] bodycopy {\n  font-family: ${v.family};\n  font-size: ${v.size}px;\n  line-height: ${v.line};\n  letter-spacing: ${v.spacing}px;\n  color: #214D3E;\n}`,
         }),
       },
       {
@@ -124,8 +126,8 @@
           ["radius", "Corner radius", "range", 12, 0, 50, "px"],
         ],
         build: (v) => ({
-          html: '<div class="lab-box">\n  Room for a new idea.\n</div>',
-          css: `.cargo-lab .lab-box {\n  padding: ${v.padding}px;\n  margin: ${v.margin}px;\n  border: ${v.border}px solid #214D3E;\n  border-radius: ${v.radius}px;\n  background: #DDF19A;\n  color: #214D3E;\n}`,
+          html: '<!-- Cargo already provides .page-content; do not add another wrapper. -->\n<h2>Room for a new idea.</h2>\nUse Page Settings or the CSS tab to adjust the page padding.',
+          css: `[id=YOUR_PAGE_ID] .page-content {\n  padding: ${v.padding}px;\n  margin: ${v.margin}px;\n  border: ${v.border}px solid #214D3E;\n  border-radius: ${v.radius}px;\n  background: #DDF19A;\n  color: #214D3E;\n}`,
         }),
       },
       {
@@ -135,7 +137,7 @@ desc: 'Change the wording, symbols, typeface and underline. Hover the button or 
 conceptTitle: 'One link, two visual states',
 concept: 'Use a link styled as a button. The normal and hover spans hold alternative labels. CSS switches the visible label on hover and keyboard focus. The link keeps a consistent accessible name. Use the same action in both labels; a symbol should support the words.',
 challenge: 'Try a wavy underline, Georgia on hover, and an arrow changing from → to ↗. Compare readability and avoid a large change in label width. Touchscreens use the normal state, so keep its wording complete.',
-cargo: 'Paste the example HTML into Code View. Replace the link destination and edit the two label spans. Set aria-label to the button’s action. Paste the complete CSS into the CSS editor. These system fonts need no import; load any custom font in Cargo before using its family name.',
+cargo: 'Paste the example HTML into Code View. Replace YOUR_PAGE_ID in the CSS with your destination page ID. Paste CSS into that page’s CSS tab. Replace the link destination and edit the two label spans. Set aria-label to the button’s action. Paste the complete CSS into the CSS editor. These system fonts need no import; load any custom font in Cargo before using its family name.',
 controls: [
  ['label','Button text','text','Explore my journal'],
  ['hoverLabel','Text on hover / focus','text','View my journal'],
@@ -152,15 +154,15 @@ controls: [
  ['brightness','Brightness','range',0.85,0.4,1.4,'',0.05]
 ],
 build: v => ({
- html: `<!-- The link below is styled as a button by the lab-button class.
+ html: `<!-- The link below is styled as a button by the workshop-button class.
      These two spans define its normal and hover labels. -->
-<a class="lab-button" href="#journal" aria-label="${esc(v.label)}">
-  <span class="lab-label-normal" aria-hidden="true">${esc(v.label)}${v.symbol==='None'?'':' '+esc(v.symbol)}</span>
-  <span class="lab-label-hover" aria-hidden="true">${esc(v.hoverLabel)}${v.hoverSymbol==='None'?'':' '+esc(v.hoverSymbol)}</span>
+<a class="workshop-button" href="#journal" aria-label="${esc(v.label)}">
+  <span class="workshop-label-normal" aria-hidden="true">${esc(v.label)}${v.symbol==='None'?'':' '+esc(v.symbol)}</span>
+  <span class="workshop-label-hover" aria-hidden="true">${esc(v.hoverLabel)}${v.hoverSymbol==='None'?'':' '+esc(v.hoverSymbol)}</span>
 </a>
 <p id="journal">Journal destination — replace with your own page link.</p>`,
  css: `/* 1. Normal state: style the link with this class. */
-.cargo-lab .lab-button {
+[id=YOUR_PAGE_ID] .workshop-button {
   display: inline-block;
   background: ${v.bg};
   color: #172A28;
@@ -176,11 +178,11 @@ build: v => ({
   transition: filter 180ms ease;
 }
 /* Show the normal wording until hover or keyboard focus. */
-.cargo-lab .lab-label-hover { display: none; }
+[id=YOUR_PAGE_ID] .workshop-label-hover { display: none; }
 
 /* 2. Hover and keyboard focus: font, underline and colour. */
-.cargo-lab .lab-button:hover,
-.cargo-lab .lab-button:focus-visible {
+[id=YOUR_PAGE_ID] .workshop-button:hover,
+[id=YOUR_PAGE_ID] .workshop-button:focus-visible {
   font-family: "${v.hoverFamily}", ${v.hoverFamily==='Georgia'?'serif':v.hoverFamily==='Courier New'?'monospace':'sans-serif'};
   font-style: ${v.hoverFontStyle}; /* normal or italic */
   text-decoration-line: ${v.underline==='none'?'none':'underline'};
@@ -190,18 +192,18 @@ build: v => ({
   filter: ${v.effect==='none'?'none':v.effect==='hue'?`hue-rotate(${v.hue}deg)`:`brightness(${v.brightness})`};
 }
 /* 3. Switch words and symbols without changing the destination. */
-.cargo-lab .lab-button:hover .lab-label-normal,
-.cargo-lab .lab-button:focus-visible .lab-label-normal { display: none; }
-.cargo-lab .lab-button:hover .lab-label-hover,
-.cargo-lab .lab-button:focus-visible .lab-label-hover { display: inline; }
+[id=YOUR_PAGE_ID] .workshop-button:hover .workshop-label-normal,
+[id=YOUR_PAGE_ID] .workshop-button:focus-visible .workshop-label-normal { display: none; }
+[id=YOUR_PAGE_ID] .workshop-button:hover .workshop-label-hover,
+[id=YOUR_PAGE_ID] .workshop-button:focus-visible .workshop-label-hover { display: inline; }
 
 /* Keep a visible keyboard focus indicator. */
-.cargo-lab .lab-button:focus-visible {
+[id=YOUR_PAGE_ID] .workshop-button:focus-visible {
   outline: 3px solid #2457D6;
   outline-offset: 4px;
 }
 @media (prefers-reduced-motion: reduce) {
-  .cargo-lab .lab-button { transition: none; }
+  [id=YOUR_PAGE_ID] .workshop-button { transition: none; }
 }`
 })
 },
@@ -215,7 +217,7 @@ build: v => ({
         challenge:
           "Use Tab to focus Work and Enter to open it. Compare vertical and horizontal layouts. Choose vertical for a stacked menu inside your Week 3 overlay.",
         cargo:
-          "Paste this HTML into your navigation page or inside your existing Cargo overlay page. Replace the example # links with real destinations using Link to Page. Set up the overlay trigger and Close Overlay link through Cargo’s Link menu. The CSS below styles only this submenu.",
+          "Paste this HTML into your navigation page or inside your existing Cargo overlay page. Replace the example # links with real destinations using Link to Page. Set up the overlay trigger and Close Overlay link through Cargo’s Link menu. Replace YOUR_PAGE_ID with the navigation or overlay page ID in every CSS selector. Paste CSS into that page’s CSS tab. The CSS below styles only this submenu.",
         controls: [
           ["menuStyle", "Menu text style", "select", "normal", ["normal", "italic"]],
 ["submenuStyle", "Submenu text style", "select", "italic", ["normal", "italic"]],
@@ -224,16 +226,16 @@ build: v => ({
           ["bg", "Submenu fill", "color", "#EEF2E8"],
         ],
         build: (v) => ({
-          html: '<nav class="lab-nav" aria-label="Example navigation">\n  <a href="#home">Home</a>\n  <details>\n    <summary>Work</summary>\n    <div class="lab-submenu">\n      <a href="#project-one">Project One</a>\n      <a href="#project-two">Project Two</a>\n    </div>\n  </details>\n  <a href="#about">About</a>\n</nav>',
-          css: `.cargo-lab .lab-nav {\n  display: flex;\n  flex-wrap: wrap;\n  flex-direction: ${v.direction === 'vertical' ? 'column' : 'row'};\n  gap: ${v.gap}px;\n  align-items: flex-start;\n}\n.cargo-lab .lab-nav a, .cargo-lab .lab-nav summary {\n  color: #214D3E;\n  font-style: ${v.menuStyle}; /* normal or italic */\n  padding: 8px;\n}\n.cargo-lab .lab-nav summary { cursor: pointer; }\n.cargo-lab .lab-submenu {\n  background: ${v.bg};\n  padding: 8px;\n  border-radius: 8px;\n}\n.cargo-lab .lab-submenu a {\n  display: block;\n  font-style: ${v.submenuStyle}; /* Override the main menu style. */\n}\n.cargo-lab .lab-nav :focus-visible {\n  outline: 3px solid #2457D6;\n  outline-offset: 2px;\n}`,
+          html: '<nav class="workshop-nav" aria-label="Example navigation">\n  <a href="#home">Home</a>\n  <details>\n    <summary>Work</summary>\n    <div class="workshop-submenu">\n      <a href="#project-one">Project One</a>\n      <a href="#project-two">Project Two</a>\n    </div>\n  </details>\n  <a href="#about">About</a>\n</nav>',
+          css: `[id=YOUR_PAGE_ID] .workshop-nav {\n  display: flex;\n  flex-wrap: wrap;\n  flex-direction: ${v.direction === 'vertical' ? 'column' : 'row'};\n  gap: ${v.gap}px;\n  align-items: flex-start;\n}\n[id=YOUR_PAGE_ID] .workshop-nav a, [id=YOUR_PAGE_ID] .workshop-nav summary {\n  color: #214D3E;\n  font-style: ${v.menuStyle}; /* normal or italic */\n  padding: 8px;\n}\n[id=YOUR_PAGE_ID] .workshop-nav summary { cursor: pointer; }\n[id=YOUR_PAGE_ID] .workshop-submenu {\n  background: ${v.bg};\n  padding: 8px;\n  border-radius: 8px;\n}\n[id=YOUR_PAGE_ID] .workshop-submenu a {\n  display: block;\n  font-style: ${v.submenuStyle}; /* Override the main menu style. */\n}\n[id=YOUR_PAGE_ID] .workshop-nav :focus-visible {\n  outline: 3px solid #2457D6;\n  outline-offset: 2px;\n}`,
         }),
       },
     ];
     const htmlNotes = [
-      '<!-- class="lab-card" connects this card to its CSS. h2 is a heading; p is a paragraph. -->',
+      '<!-- h2 uses Cargo Heading 2; ordinary text inherits Bodycopy. -->',
       '<!-- Heading and paragraph tags describe content. Their classes select the matching CSS rules. -->',
-      '<!-- The paragraph class connects its words to the font and spacing rules. -->',
-      '<!-- This div groups content into one box. CSS controls its padding, border and outer margin. -->',
+      '<!-- bodycopy is Cargo’s existing text container. Do not add a bodycopy element yourself. -->',
+      '<!-- Cargo already wraps the page in .page-content. The CSS targets that existing container. -->',
       '<!-- Both labels belong to the same link. Change its href to your destination. -->',
       '<!-- nav groups links. details opens and closes; summary is its clickable label. Replace # links in Cargo. -->'
     ];
@@ -242,7 +244,7 @@ build: v => ({
       title: 'Paste Cargo HTML and CSS. Inspect one change at a time.',
       desc: 'Paste page Code View HTML on the left and its CSS below. Colours separate tags, attributes, values and comments. Check code, then apply to the preview.',
       conceptTitle: 'Your pasted code stays yours',
-      concept: 'This workspace adds no cargo-lab wrapper or foundation styles. cargo-lab is just our custom example class, not a Cargo requirement. Keep the classes used in your own code and match them in CSS. Checks report common structural issues; they do not automatically repair your work.',
+      concept: 'This workspace adds no wrapper or foundation styles to your copied source. Keep the classes used in your own code and match them in CSS. Checks report common structural issues; they do not automatically repair your work.',
       challenge: 'Paste a small section first. Remove a closing brace from CSS, click Check code, then restore it. Use the reported line number to find the problem. Copy your corrected source back to Cargo after testing.',
       cargo: 'HTML: copy from your Cargo page Code View. CSS: copy the relevant rules from its CSS tab or the site CSS editor. Keep a backup. Cargo page IDs, custom components, overlays, external assets and scripts may not render here. Use Cargo preview for the final check. Drafts are saved in this browser on this device and are not uploaded by the lab. Reset lesson clears the current draft.',
       controls: [], raw: true,
@@ -414,7 +416,8 @@ codePanel.onkeydown = event => {
       values = {};
       const l = lessons[i];
       l.controls.forEach((c) => (values[c[0]] = c[3]));
-      const saved = reset ? null : drafts.lessons[l.name];
+      const previous = drafts.lessons[l.name];
+      const saved = reset || (previous && !previous.dirty && previous.version !== 2) ? null : previous;
       if (saved?.values) Object.assign(values, saved.values);
       [...$("lessons").children].forEach((b, j) =>
         b.setAttribute("aria-current", i === j),
@@ -435,14 +438,14 @@ codePanel.onkeydown = event => {
         paintEditor('html'); paintEditor('css');
         render();
         $('mode').textContent = 'Recovered draft';
-        $('status').textContent = 'Your saved HTML and CSS have been restored.';
+        $('status').textContent = 'Your saved HTML and CSS have been restored. Reset lesson loads the latest Cargo-native example.';
         saveDraft();
       } else generate();
     }
     function saveDraft() {
       drafts.active = active;
       drafts.lessons[lessons[active].name] = {
-        html: $('html').value, css: $('css').value, values: {...values}, dirty
+        html: $('html').value, css: $('css').value, values: {...values}, dirty, version: 2
       };
       try { localStorage.setItem(draftKey, JSON.stringify(drafts)); }
       catch (_) { $('status').textContent = 'Browser storage is unavailable. Download your code before closing or refreshing.'; }
@@ -523,8 +526,8 @@ codePanel.onkeydown = event => {
     }
     function generate() {
       current = lessons[active].build(values);
-      $("html").value = lessons[active].raw ? current.html : '<!-- cargo-lab is our custom wrapper, not a Cargo requirement. It scopes the example CSS. -->\n<div class="cargo-lab">\n' + htmlNotes[active] + '\n' + current.html + "\n</div>";
-      $("css").value = (lessons[active].raw ? "" : sharedCSS) + current.css;
+      $("html").value = lessons[active].raw ? current.html : htmlNotes[active] + "\n" + current.html;
+      $("css").value = (lessons[active].raw ? "" : '/* Cargo page CSS: replace YOUR_PAGE_ID with your page ID.\n   workshop-* classes are custom hooks; Cargo Text Styles still provide defaults. */\n') + current.css;
       paintEditor("html"); paintEditor("css");
       diagnostics.replaceChildren();
       dirty = false;
@@ -537,8 +540,13 @@ codePanel.onkeydown = event => {
       $("preview").setAttribute("sandbox", "");
       const h = $("html").value;
       const c = $("css").value;
+      // Preview-only stand-in for the Cargo page wrapper and column runtime.
+      // This helper is never included in copied/downloaded student code.
+      const demoCSS = lessons[active].raw ? c : c.replaceAll('YOUR_PAGE_ID', 'cargo-preview');
+      const demoHTML = lessons[active].raw ? h : '<div id="cargo-preview"><div class="page-content"><bodycopy>' + h + '</bodycopy></div></div>';
+      const previewOnly = lessons[active].raw ? '' : 'body{font:18px/1.5 Arial,sans-serif;padding:20px} bodycopy{display:block} .caption{font-size:14px} column-set{display:flex;gap:2rem} column-unit{flex:1;min-width:0} @media(max-width:500px){column-set[mobile-stack="true"]{flex-direction:column}}';
       $("preview").srcdoc =
-        `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:"><style>${c.replace(/<\/style/gi, "")}</style></head><body>${h}</body></html>`;
+        `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:"><style>${previewOnly}${demoCSS.replace(/<\/style/gi, "")}</style></head><body>${demoHTML}</body></html>`;
     }
     ["html", "css"].forEach(
       (id) =>
